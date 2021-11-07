@@ -1,5 +1,5 @@
 class Group {
-  constructor(name, students = []) {
+  constructor(name, students) {
     this.name = name;
     this.students = students;
   }
@@ -17,10 +17,13 @@ class Group {
   }
 
   set students(students) {
-    if (students instanceof Array) {
+    if (
+      students instanceof Array &&
+      students.reduce((result, item) => result && item instanceof Student, true)
+    ) {
       this._students = students;
     } else {
-      throw new Error('Studens must be an array');
+      throw new Error('Students must be an array of Student');
     }
   }
 
@@ -29,8 +32,12 @@ class Group {
   }
 
   showStudents() {
-    this._students.forEach((student) => {
-      console.log(`${student.surname} ${student.name[0]}.`);
-    });
+    if (this._students.length === 0) {
+      console.log('The group has no students');
+    } else {
+      this._students.forEach((student) => {
+        console.log(`${student.surname} ${student.name[0]}.`);
+      });
+    }
   }
 }
